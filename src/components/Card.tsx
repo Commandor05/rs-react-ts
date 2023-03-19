@@ -7,16 +7,14 @@ type CardsProps = {
 
 class Card extends Component<CardsProps> {
   render() {
-    const { title, description, price, discountPercentage, rating, brand, category, thumbnail } =
-      this.props.item;
-    console.log(description, price, discountPercentage, rating, brand, category, thumbnail);
+    const { title, description, price, discountPercentage, brand, thumbnail } = this.props.item;
     return (
       <div
         className="flex flex-col gap-2 
         rounded-md border-indigo-600 border-2 
         shadow-md hover:shadow-2xl bg-slate-100  w-64 sm:w-80 py-3 text-lg"
       >
-        <div className="justify-self-center self-center text-xl font-bold text-center">{title}</div>
+        <h3 className="justify-self-center self-center text-xl font-bold text-center">{title}</h3>
         <img
           className="h-52 justify-self-center self-center"
           src={thumbnail}

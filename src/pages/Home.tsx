@@ -14,7 +14,6 @@ type HomeState = {
 class Home extends Component<HomeProps, HomeState> {
   state: HomeState = { findProducts: productsData };
   handleSearch = (queryString: string) => {
-    console.log('query', queryString);
     if (!queryString) {
       this.setState(() => ({ findProducts: productsData }));
     } else {
@@ -29,7 +28,7 @@ class Home extends Component<HomeProps, HomeState> {
   render() {
     return (
       <GeneralLayout>
-        <section className="flex flex-col">
+        <section className="flex flex-col" data-testid="home-page-content">
           <SearchBox handleSearch={this.handleSearch} />
           <CardsList items={this.state.findProducts} />
         </section>

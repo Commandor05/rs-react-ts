@@ -10,6 +10,7 @@ type SearchBoxProps = {
 
 type SearchBoxState = {
   searchValue: string;
+  searchIsApplied: boolean;
 };
 
 class SearchBox extends Component<SearchBoxProps, SearchBoxState> {
@@ -17,28 +18,37 @@ class SearchBox extends Component<SearchBoxProps, SearchBoxState> {
 
   state: SearchBoxState = {
     searchValue: '',
+    searchIsApplied: false,
   };
 
   componentDidMount() {
     const searchValue = this.localSstorage.getData(StorageKey.searchQuery) as string;
+    const searchIsApplied = this.localSstorage.getData(StorageKey.searchIsApplied) as boolean;
+
     if (searchValue) {
       this.setState({ searchValue: searchValue });
+    }
+
+    if (searchIsApplied) {
       this.props.handleSearch(searchValue);
     }
   }
 
   componentWillUnmount() {
     this.localSstorage.setData(StorageKey.searchQuery, this.state.searchValue);
+    this.localSstorage.setData(StorageKey.searchIsApplied, this.state.searchIsApplied);
   }
 
   handleSearch = () => {
     this.props.handleSearch(this.state.searchValue);
+    this.setState({ searchIsApplied: true });
   };
 
   handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchValue: event.target.value });
+    this.setState({ searchValue: event.target.value, searchIsApplied: false });
     if (!event.target.value) {
       this.props.handleSearch(event.target.value);
+      this.setState({ searchIsApplied: true });
     }
   };
 

@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import GeneralLayout from '../layouts/GeneralLayout';
 
+export const ABOUT_TITLE = 'About Us';
+
 class About extends Component {
   render() {
     return (
       <GeneralLayout>
         <div className="py-10 text-base break-words">
-          <h2 className="text-3xl font-bold mb-5">About Us</h2>
+          <h1 className="text-3xl font-bold mb-5">{ABOUT_TITLE}</h1>
           <p className="indent-8 mb-3">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ornare mauris est, in
             congue ex vulputate nec. Sed at maximus sem, id ornare nulla. Vestibulum feugiat sed

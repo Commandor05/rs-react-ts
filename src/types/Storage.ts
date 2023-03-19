@@ -1,5 +1,6 @@
 export enum StorageKey {
   searchQuery = 'searchQuery',
+  searchIsApplied = 'searchIsApplied',
 }
 
 export interface Storage {
