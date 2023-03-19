@@ -23,6 +23,7 @@ class SearchBox extends Component<SearchBoxProps, SearchBoxState> {
     const searchValue = this.localSstorage.getData(StorageKey.searchQuery) as string;
     if (searchValue) {
       this.setState({ searchValue: searchValue });
+      this.props.handleSearch(searchValue);
     }
   }
 
@@ -43,16 +44,23 @@ class SearchBox extends Component<SearchBoxProps, SearchBoxState> {
 
   render() {
     return (
-      <div>
-        <input
-          type="search"
-          id="search"
-          value={this.state.searchValue}
-          onChange={this.handleChange}
-        />
-        <button aria-label="search" onClick={this.handleSearch}>
-          {SEARCH_BUTTON_TITLE}
-        </button>
+      <div className="max-w-2xl my-10 mx-auto p-5">
+        <div className="container flex self-center justify-self-center w-auto max-w-none shadow-md">
+          <input
+            className="grow py-3 px-6 rounded-l-md border-2 border-indigo-300"
+            type="search"
+            id="search"
+            value={this.state.searchValue}
+            onChange={this.handleChange}
+          />
+          <button
+            aria-label="search"
+            className="py-3 px-6 bg-indigo-600 hover:bg-indigo-700 rounded-r-md text-white"
+            onClick={this.handleSearch}
+          >
+            {SEARCH_BUTTON_TITLE}
+          </button>
+        </div>
       </div>
     );
   }

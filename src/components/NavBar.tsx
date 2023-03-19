@@ -5,12 +5,22 @@ class NavBar extends Component {
   render() {
     return (
       <nav>
-        <ul>
-          <li>
-            <NavLink to="/">Home</NavLink>
+        <ul className="flex">
+          <li className="px-5">
+            <NavLink
+              className={({ isActive }) => (isActive ? 'text-slate-50' : 'text-gray-400')}
+              to="/"
+            >
+              Home
+            </NavLink>
           </li>
-          <li>
-            <NavLink to="/about">About Us</NavLink>
+          <li className="px-5">
+            <NavLink
+              className={({ isActive }) => (isActive ? 'text-slate-50' : 'text-gray-400')}
+              to="/about"
+            >
+              About Us
+            </NavLink>
           </li>
         </ul>
       </nav>
