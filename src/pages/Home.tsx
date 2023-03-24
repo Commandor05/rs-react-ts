@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import CardsList from '../components/CardsList';
 import SearchBox from '../components/SearchBox';
-import GeneralLayout from '../layouts/GeneralLayout';
 import productsData from '../data/products';
 import { Product } from '../types/Product';
 
@@ -27,12 +26,10 @@ class Home extends Component<HomeProps, HomeState> {
 
   render() {
     return (
-      <GeneralLayout>
-        <section className="flex flex-col" data-testid="home-page-content">
-          <SearchBox handleSearch={this.handleSearch} />
-          <CardsList items={this.state.findProducts} />
-        </section>
-      </GeneralLayout>
+      <section className="flex flex-col" data-testid="home-page-content">
+        <SearchBox handleSearch={this.handleSearch} />
+        <CardsList<Product> items={this.state.findProducts} />
+      </section>
     );
   }
 }
