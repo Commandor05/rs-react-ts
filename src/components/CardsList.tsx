@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
 import Card from './Card';
 import { Product } from '../types/Product';
+import { User } from '../types/User';
+import UserCard from './UserCard';
 
-type CardsListProps = {
-  items: Product[] | [];
+type CardsListProps<T> = {
+  items: T[] | [];
 };
 
 export const NO_DATA_MESSAGE = 'No Data to display \\_(^;^)_/';
 
-class CardsList extends Component<CardsListProps> {
+function isProduct(arg: Product | User): arg is Product {
+  return 'brand' in arg;
+}
+
+class CardsList<T extends Product | User> extends Component<CardsListProps<T>> {
   render() {
     const items = this.props.items;
     return (
@@ -16,7 +22,13 @@ class CardsList extends Component<CardsListProps> {
         {items.length === 0 ? (
           <h2 className="text-5xl font-bold text-center">{NO_DATA_MESSAGE}</h2>
         ) : (
-          items.map((item: Product) => <Card key={item.id} item={item} />)
+          items.map((item: T) =>
+            isProduct(item) ? (
+              <Card key={item.id} item={item} />
+            ) : (
+              <UserCard key={`${item.name}+${item.surname}`} item={item} />
+            )
+          )
         )}
       </div>
     );
