@@ -17,6 +17,7 @@ class UserCard extends Component<UserCardsProps> {
       userGender,
       userTerms,
       userPromotions,
+      userAvatar,
     } = this.props.item;
     return (
       <div
@@ -25,9 +26,9 @@ class UserCard extends Component<UserCardsProps> {
         shadow-md hover:shadow-2xl bg-slate-100  w-64 sm:w-80 p-3 text-lg"
       >
         <img
-          className="w-24 h-24 justify-self-center self-center"
-          src={avatar}
-          alt="Default Avatar"
+          className="w-24 h-24 justify-self-center self-center rounded-full"
+          src={userAvatar ? URL.createObjectURL(userAvatar) : avatar}
+          alt="Avatar"
         />
         <div>
           <h3 className="justify-self-center self-center text-xl font-bold text-center">

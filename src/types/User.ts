@@ -6,4 +6,5 @@ export type User = {
   userGender: 'female' | 'male';
   userTerms: boolean;
   userPromotions: boolean;
+  userAvatar?: File;
 };

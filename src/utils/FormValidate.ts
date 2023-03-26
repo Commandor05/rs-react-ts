@@ -1,8 +1,8 @@
 import { Validations } from '../types/Validation';
 import { ErrorRecord } from '../types/ErrorRecord';
 
-export const FormValidate = <T extends Record<string, never>>(
-  data: T,
+export const FormValidate = <T extends Record<keyof T, unknown>>(
+  data: Partial<T>,
   validations: Validations<T>
 ) => {
   const newErrors: ErrorRecord<T> = {};
@@ -13,21 +13,15 @@ export const FormValidate = <T extends Record<string, never>>(
 
     const paattern = validation?.pattern;
     if (paattern?.value && !RegExp(paattern.value).test(value as string)) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       newErrors[key] = paattern.message;
     }
 
     const custom = validation?.custom;
     if (custom?.isValid && !custom.isValid(value as string)) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       newErrors[key] = custom.message;
     }
 
     if (validation?.required?.value && !value) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       newErrors[key] = validation?.required?.message;
     }
   }

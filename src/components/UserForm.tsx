@@ -56,36 +56,53 @@ class UserForm<T extends User> extends Component<UserFormProps, UserFormState<T>
   handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
     const data = {} as User;
-    if (this.userNameInput.current) {
-      data[this.userNameInput.current?.name as keyof User] = this.userNameInput.current?.value;
+    if (this.userNameInput.current && this.userNameInput.current.name) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      data[this.userNameInput.current.name as keyof User] = this.userNameInput.current?.value;
     }
 
     if (this.userSurnameInput.current) {
-      data[this.userSurnameInput.current?.name as keyof User] =
-        this.userSurnameInput.current?.value;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      data[this.userSurnameInput.current?.name] = this.userSurnameInput.current?.value;
     }
 
     if (this.userBirthdayInput.current) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       data[this.userBirthdayInput.current?.name as keyof User] =
         this.userBirthdayInput.current?.value;
     }
 
     if (this.userCountryInput.current) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       data[this.userCountryInput.current?.name as keyof User] =
         this.userCountryInput.current?.value;
     }
 
     if (this.userGenderInput.current) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       data[this.userGenderInput.current?.name as keyof User] =
         this.userGenderInput.current?.getValue();
     }
 
     if (this.userTermsInput.current) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       data[this.userTermsInput.current?.name as keyof User] = this.userTermsInput.current?.checked;
     }
     if (this.userPromotionsInput.current) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       data[this.userPromotionsInput.current?.name as keyof User] =
         this.userPromotionsInput.current?.checked;
+    }
+
+    if (this.uploadAvatarInput.current) {
+      data['userAvatar'] = this.uploadAvatarInput.current?.files?.[0];
     }
 
     const errors = FormValidate(data, validationUserRules.validations);
@@ -102,6 +119,8 @@ class UserForm<T extends User> extends Component<UserFormProps, UserFormState<T>
         this.props.onFormSubmit(data as User);
       }
     } else {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.setState({ errors: errors });
     }
   };
@@ -142,7 +161,11 @@ class UserForm<T extends User> extends Component<UserFormProps, UserFormState<T>
             <p className="text-red-500">{this.state?.errors?.userGender}</p>
           )}
 
-          <FileUploader name="avatar" label="Upload avatar:" forwardRef={this.uploadAvatarInput} />
+          <FileUploader
+            name="userAvatar"
+            label="Upload avatar:"
+            forwardRef={this.uploadAvatarInput}
+          />
 
           <Checkbox
             name="userTerms"
