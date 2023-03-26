@@ -6,8 +6,6 @@ export const FormValidate = <T extends Record<string, never>>(
   validations: Validations<T>
 ) => {
   const newErrors: ErrorRecord<T> = {};
-  console.log('data', data);
-  console.log('validations', validations);
 
   for (const key in validations) {
     const value = data[key];

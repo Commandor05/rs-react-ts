@@ -30,5 +30,23 @@ export const validationUserRules = {
         message: 'Invalid date format',
       },
     },
+    userCountry: {
+      required: {
+        value: true,
+        message: 'Required',
+      },
+    },
+    userGender: {
+      required: {
+        value: true,
+        message: 'Required',
+      },
+    },
+    userTerms: {
+      required: {
+        value: true,
+        message: 'Required',
+      },
+    },
   },
 };

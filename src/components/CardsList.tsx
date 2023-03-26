@@ -22,11 +22,11 @@ class CardsList<T extends Product | User> extends Component<CardsListProps<T>> {
         {items.length === 0 ? (
           <h2 className="text-5xl font-bold text-center">{NO_DATA_MESSAGE}</h2>
         ) : (
-          items.map((item: T) =>
+          items.map((item: T, index) =>
             isProduct(item) ? (
               <Card key={item.id} item={item} />
             ) : (
-              <UserCard key={`${item.name}+${item.surname}`} item={item} />
+              <UserCard key={index} item={item} />
             )
           )
         )}

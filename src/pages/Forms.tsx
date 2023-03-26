@@ -12,11 +12,17 @@ type FormsState = {
 class Forms extends Component<FormsProps, FormsState> {
   state: FormsState = { users: [] };
 
+  handleFormSubmit = (userData: User) => {
+    this.setState((prevState) => ({
+      users: [...prevState.users, userData],
+    }));
+  };
+
   render() {
     return (
       <>
-        <UserForm />
-        <hr />
+        <UserForm<User> onFormSubmit={this.handleFormSubmit} />
+        <hr className="m-10" />
         <CardsList<User> items={this.state.users} />
       </>
     );

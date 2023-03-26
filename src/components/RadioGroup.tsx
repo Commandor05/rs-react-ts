@@ -1,4 +1,4 @@
-import React, { Component, RefObject } from 'react';
+import React, { Component } from 'react';
 
 type RadioGroupProps = {
   name: string;
@@ -12,6 +12,11 @@ type RadioGroupState = {
 };
 
 class RadioGroup extends Component<RadioGroupProps, RadioGroupState> {
+  name: string;
+  constructor(props: RadioGroupProps) {
+    super(props);
+    this.name = props.name;
+  }
   state: RadioGroupState = {
     value: null,
   };
