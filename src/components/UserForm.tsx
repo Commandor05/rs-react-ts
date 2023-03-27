@@ -49,6 +49,10 @@ class UserForm<T extends User> extends Component<UserFormProps, UserFormState<T>
     this.formRef = React.createRef();
   }
 
+  componentDidMount() {
+    this.userNameInput.current?.focus();
+  }
+
   hideConfirmModal = () => {
     this.setState({ showConfirmModal: false });
   };
