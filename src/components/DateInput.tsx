@@ -15,7 +15,7 @@ class DateInput extends Component<DateInputProps> {
           <label className="input-label" htmlFor={name}>
             {label}
           </label>
-          <input ref={forwardRef} className="input" type="date" name={name} />
+          <input ref={forwardRef} id={name} className="input" type="date" name={name} />
         </div>
       </div>
     );

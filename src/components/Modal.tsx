@@ -21,7 +21,7 @@ class Modal extends Component<ModalProps> {
     }
 
     return (
-      <div className="modal" onClick={this.closeModal}>
+      <div className="modal" data-testid="test-modal" onClick={this.closeModal}>
         <div className="modal-container" onClick={this.preventClose}>
           {this.props.children && this.props.children}
         </div>
