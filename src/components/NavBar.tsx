@@ -22,6 +22,14 @@ class NavBar extends Component {
               About Us
             </NavLink>
           </li>
+          <li className="px-5">
+            <NavLink
+              className={({ isActive }) => (isActive ? 'text-slate-50' : 'text-gray-400')}
+              to="/forms"
+            >
+              Forms
+            </NavLink>
+          </li>
         </ul>
       </nav>
     );
