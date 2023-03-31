@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 type ModalProps = {
   children?: ReactNode;
@@ -6,28 +6,27 @@ type ModalProps = {
   onClose: () => void;
 };
 
-class Modal extends Component<ModalProps> {
-  closeModal = () => {
-    this.props.onClose();
+const Modal: React.FC<ModalProps> = (props) => {
+  const { show, onClose } = props;
+  const closeModal = () => {
+    onClose();
   };
 
-  preventClose = (e: React.MouseEvent<HTMLDivElement>) => {
+  const preventClose = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
 
-  render() {
-    if (!this.props.show) {
-      return null;
-    }
-
-    return (
-      <div className="modal" data-testid="test-modal" onClick={this.closeModal}>
-        <div className="modal-container" onClick={this.preventClose}>
-          {this.props.children && this.props.children}
-        </div>
-      </div>
-    );
+  if (!show) {
+    return null;
   }
-}
+
+  return (
+    <div className="modal" data-testid="test-modal" onClick={closeModal}>
+      <div className="modal-container" onClick={preventClose}>
+        {props.children && props.children}
+      </div>
+    </div>
+  );
+};
 
 export default Modal;
