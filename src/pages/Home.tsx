@@ -1,37 +1,31 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import CardsList from '../components/CardsList';
 import SearchBox from '../components/SearchBox';
 import productsData from '../data/products';
 import { Product } from '../types/Product';
 
-type HomeProps = unknown;
+type FindProductsState = Product[] | [];
 
-type HomeState = {
-  findProducts: Product[] | [];
-};
-
-class Home extends Component<HomeProps, HomeState> {
-  state: HomeState = { findProducts: productsData };
-  handleSearch = (queryString: string) => {
+const Home: React.FC = () => {
+  const [findProducts, setFindProducts] = useState<FindProductsState>(productsData);
+  const handleSearch = (queryString: string) => {
     if (!queryString) {
-      this.setState(() => ({ findProducts: productsData }));
+      setFindProducts(productsData);
     } else {
-      this.setState(() => ({
-        findProducts: productsData.filter((product) =>
+      setFindProducts(
+        productsData.filter((product) =>
           product.title.toUpperCase().includes(queryString.toUpperCase())
-        ),
-      }));
+        )
+      );
     }
   };
 
-  render() {
-    return (
-      <section className="flex flex-col" data-testid="home-page-content">
-        <SearchBox handleSearch={this.handleSearch} />
-        <CardsList<Product> items={this.state.findProducts} />
-      </section>
-    );
-  }
-}
+  return (
+    <section className="flex flex-col" data-testid="home-page-content">
+      <SearchBox handleSearch={handleSearch} />
+      <CardsList<Product> items={findProducts} />
+    </section>
+  );
+};
 
 export default Home;

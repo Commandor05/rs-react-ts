@@ -1,32 +1,24 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import CardsList from '../components/CardsList';
 import UserForm from '../components/UserForm';
 import { User } from '../types/User';
 
-type FormsProps = unknown;
+type UsersState = User[] | [];
 
-type FormsState = {
-  users: User[] | [];
-};
+const Forms: React.FC = () => {
+  const [users, setUsers] = useState<UsersState>([]);
 
-class Forms extends Component<FormsProps, FormsState> {
-  state: FormsState = { users: [] };
-
-  handleFormSubmit = (userData: User) => {
-    this.setState((prevState) => ({
-      users: [...prevState.users, userData],
-    }));
+  const handleFormSubmit = (userData: User) => {
+    setUsers((prevState) => [...prevState, userData]);
   };
 
-  render() {
-    return (
-      <>
-        <UserForm<User> onFormSubmit={this.handleFormSubmit} />
-        <hr className="m-10" />
-        <CardsList<User> items={this.state.users} />
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <UserForm<User> onFormSubmit={handleFormSubmit} />
+      <hr className="m-10" />
+      <CardsList<User> items={users} />
+    </>
+  );
+};
 
 export default Forms;
