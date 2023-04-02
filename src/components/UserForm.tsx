@@ -1,9 +1,8 @@
-import React, { Component, RefObject } from 'react';
+import React, { useState, useEffect } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { validationUserRules } from '../configs/validationUserRules';
 import { countries } from '../configs/countries';
-import { ErrorRecord } from '../types/ErrorRecord';
 import { User } from '../types/User';
-import { FormValidate } from '../utils/FormValidate';
 import DateInput from './DateInput';
 import FileUploader from './FileUploader';
 import Modal from './Modal';
@@ -16,192 +15,113 @@ type UserFormProps = {
   onFormSubmit: (userData: User) => void;
 };
 
-type UserFormState<T> = {
-  errors: ErrorRecord<T> | null;
-  showConfirmModal: boolean;
+export type UserFormValues = User & {
+  uploadFile?: File[];
 };
 
-class UserForm<T extends User> extends Component<UserFormProps, UserFormState<T>> {
-  state: UserFormState<T> = {
-    errors: null,
-    showConfirmModal: false,
+const UserForm: React.FC<UserFormProps> = ({ onFormSubmit }) => {
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setFocus,
+  } = useForm<Partial<UserFormValues>>();
+
+  useEffect(() => {
+    setFocus('userName');
+  }, [setFocus]);
+
+  const hideConfirmModal = () => {
+    setShowConfirmModal(false);
   };
 
-  userNameInput: RefObject<HTMLInputElement>;
-  userSurnameInput: RefObject<HTMLInputElement>;
-  uploadAvatarInput: RefObject<HTMLInputElement>;
-  userBirthdayInput: RefObject<HTMLInputElement>;
-  userCountryInput: RefObject<HTMLSelectElement>;
-  userTermsInput: RefObject<HTMLInputElement>;
-  userPromotionsInput: RefObject<HTMLInputElement>;
-  userGenderInput: RefObject<RadioGroup>;
-  formRef: React.RefObject<HTMLFormElement>;
-  constructor(props: UserFormProps) {
-    super(props);
-    this.userNameInput = React.createRef();
-    this.userSurnameInput = React.createRef();
-    this.userBirthdayInput = React.createRef();
-    this.userCountryInput = React.createRef();
-    this.userTermsInput = React.createRef();
-    this.userPromotionsInput = React.createRef();
-    this.userGenderInput = React.createRef();
-    this.uploadAvatarInput = React.createRef();
-    this.formRef = React.createRef();
-  }
-
-  componentDidMount() {
-    this.userNameInput.current?.focus();
-  }
-
-  hideConfirmModal = () => {
-    this.setState({ showConfirmModal: false });
+  const onSubmit: SubmitHandler<Partial<UserFormValues>> = (data) => {
+    setShowConfirmModal(true);
+    if (data.uploadFile && data.uploadFile?.length > 0) {
+      data.userAvatar = data.uploadFile[0];
+      delete data.uploadFile;
+    }
+    onFormSubmit(data as User);
+    reset();
   };
 
-  handleSubmit = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    const data = {} as User;
-    if (this.userNameInput.current && this.userNameInput.current.name) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      data[this.userNameInput.current.name as keyof User] = this.userNameInput.current?.value;
-    }
+  return (
+    <div className="flex justify-center">
+      <form className="w-9/12" onSubmit={handleSubmit(onSubmit)}>
+        <TextInput<Partial<UserFormValues>>
+          name="userName"
+          label="Name*:"
+          register={register}
+          validation={validationUserRules.validations.userName}
+        />
+        <p className="text-red-500">{errors?.userName?.message}</p>
 
-    if (this.userSurnameInput.current) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      data[this.userSurnameInput.current?.name] = this.userSurnameInput.current?.value;
-    }
+        <TextInput<Partial<UserFormValues>>
+          name="userSurname"
+          label="Surname*:"
+          register={register}
+          validation={validationUserRules.validations.userSurname}
+        />
+        <p className="text-red-500">{errors?.userSurname?.message}</p>
 
-    if (this.userBirthdayInput.current) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      data[this.userBirthdayInput.current?.name as keyof User] =
-        this.userBirthdayInput.current?.value;
-    }
+        <DateInput<Partial<UserFormValues>>
+          name="userBirthday"
+          label="Birthday*:"
+          register={register}
+          validation={validationUserRules.validations.userBirthday}
+        />
+        <p className="text-red-500">{errors?.userBirthday?.message}</p>
 
-    if (this.userCountryInput.current) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      data[this.userCountryInput.current?.name as keyof User] =
-        this.userCountryInput.current?.value;
-    }
+        <SelectBox
+          {...register('userCountry', validationUserRules.validations.userCountry)}
+          name="userCountry"
+          label="Country:"
+          options={countries}
+        />
+        <p className="text-red-500">{errors?.userCountry?.message}</p>
 
-    if (this.userGenderInput.current) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      data[this.userGenderInput.current?.name as keyof User] =
-        this.userGenderInput.current?.getValue();
-    }
+        <RadioGroup
+          name="userGender"
+          label="Gender*:"
+          register={register}
+          validation={validationUserRules.validations.userGender}
+          options={['female', 'male']}
+        />
+        <p className="text-red-500">{errors?.userGender?.message}</p>
 
-    if (this.userTermsInput.current) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      data[this.userTermsInput.current?.name as keyof User] = this.userTermsInput.current?.checked;
-    }
-    if (this.userPromotionsInput.current) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      data[this.userPromotionsInput.current?.name as keyof User] =
-        this.userPromotionsInput.current?.checked;
-    }
+        <FileUploader name="uploadFile" label="Upload avatar:" register={register} />
 
-    if (this.uploadAvatarInput.current) {
-      data['userAvatar'] = this.uploadAvatarInput.current?.files?.[0];
-    }
+        <Checkbox<Partial<UserFormValues>>
+          name="userTerms"
+          label="I accept all tetms and conditions*"
+          register={register}
+          validation={validationUserRules.validations.userTerms}
+        />
+        <p className="text-red-500">{errors?.userTerms?.message}</p>
 
-    const errors = FormValidate(data, validationUserRules.validations);
+        <Checkbox<Partial<UserFormValues>>
+          name="userPromotions"
+          label="I consent to receive information about promotions"
+          register={register}
+        />
 
-    if (this.uploadAvatarInput.current?.files && this.uploadAvatarInput.current?.files.length > 0) {
-      this.uploadAvatarInput.current.files = null;
-    }
-
-    if (Object.keys(errors).length === 0) {
-      this.setState({ showConfirmModal: true, errors: null });
-      this.formRef.current?.reset();
-
-      if (Object.keys(data).length > 0) {
-        this.props.onFormSubmit(data as User);
-      }
-    } else {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      this.setState({ errors: errors });
-    }
-  };
-
-  render() {
-    return (
-      <div className="flex justify-center">
-        <form ref={this.formRef} className="w-9/12" onSubmit={this.handleSubmit}>
-          <TextInput name="userName" label="Name*:" forwardRef={this.userNameInput} />
-          {this.state?.errors?.userName && (
-            <p className="text-red-500">{this.state?.errors?.userName}</p>
-          )}
-
-          <TextInput name="userSurname" label="Surname*:" forwardRef={this.userSurnameInput} />
-          {this.state?.errors?.userSurname && (
-            <p className="text-red-500">{this.state?.errors?.userSurname}</p>
-          )}
-
-          <DateInput name="userBirthday" label="Birthday*:" forwardRef={this.userBirthdayInput} />
-          {this.state?.errors?.userBirthday && (
-            <p className="text-red-500">{this.state?.errors?.userBirthday}</p>
-          )}
-
-          <SelectBox
-            name="userCountry"
-            label="Country:"
-            forwardRef={this.userCountryInput}
-            options={countries}
-          />
-
-          <RadioGroup
-            name="userGender"
-            label="Gender*:"
-            ref={this.userGenderInput}
-            options={['female', 'male']}
-          />
-          {this.state?.errors?.userGender && (
-            <p className="text-red-500">{this.state?.errors?.userGender}</p>
-          )}
-
-          <FileUploader
-            name="userAvatar"
-            label="Upload avatar:"
-            forwardRef={this.uploadAvatarInput}
-          />
-
-          <Checkbox
-            name="userTerms"
-            label="I accept all tetms and conditions*"
-            forwardRef={this.userTermsInput}
-          />
-          {this.state?.errors?.userTerms && (
-            <p className="text-red-500">{this.state?.errors?.userTerms}</p>
-          )}
-
-          <Checkbox
-            name="userPromotions"
-            label="I consent to receive information about promotions"
-            forwardRef={this.userPromotionsInput}
-          />
-
-          <div className="text-right">
-            <button className="button" type="submit">
-              Submit
-            </button>
+        <div className="text-right">
+          <button className="button" type="submit">
+            Submit
+          </button>
+        </div>
+      </form>
+      <Modal onClose={hideConfirmModal} show={showConfirmModal}>
+        <div className="w-max h-max bg-slate-300 rounded-md border-indigo-600 border-2 shadow-md">
+          <div>
+            <h2 className="text-4xl text-center align-middle p-11">The data has been saved!</h2>
           </div>
-        </form>
-        <Modal onClose={this.hideConfirmModal} show={this.state.showConfirmModal}>
-          <div className="w-max h-max bg-slate-300 rounded-md border-indigo-600 border-2 shadow-md">
-            <div>
-              <h2 className="text-4xl text-center align-middle p-11">The data has been saved!</h2>
-            </div>
-          </div>
-        </Modal>
-      </div>
-    );
-  }
-}
+        </div>
+      </Modal>
+    </div>
+  );
+};
 
 export default UserForm;

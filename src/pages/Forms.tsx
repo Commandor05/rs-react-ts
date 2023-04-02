@@ -14,7 +14,7 @@ const Forms: React.FC = () => {
 
   return (
     <>
-      <UserForm<User> onFormSubmit={handleFormSubmit} />
+      <UserForm onFormSubmit={handleFormSubmit} />
       <hr className="m-10" />
       <CardsList<User> items={users} />
     </>

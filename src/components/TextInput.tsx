@@ -1,25 +1,29 @@
-import React, { Component, RefObject } from 'react';
+import React from 'react';
+import { Path, UseFormRegister, RegisterOptions, FieldValues } from 'react-hook-form';
 
-type TextInputProps = {
-  name: string;
+type TextInputProps<TFormValue extends FieldValues> = {
   label: string;
-  forwardRef: RefObject<HTMLInputElement>;
+  name: Path<TFormValue>;
+  register: UseFormRegister<TFormValue>;
+  validation?: RegisterOptions;
 };
 
-class TextInput extends Component<TextInputProps> {
-  render() {
-    const { name, label, forwardRef } = this.props;
-    return (
-      <div className="wrapper">
-        <div className="container flex flex-col">
-          <label className="input-label" htmlFor={name}>
-            {label}
-          </label>
-          <input ref={forwardRef} className="input" type="text" name={name} />
-        </div>
+const TextInput = <TFormValues extends Record<string, unknown>>({
+  name,
+  label,
+  register,
+  validation,
+}: TextInputProps<TFormValues>): JSX.Element => {
+  return (
+    <div className="wrapper">
+      <div className="container flex flex-col">
+        <label className="input-label" htmlFor={name}>
+          {label}
+        </label>
+        <input {...register(name, validation)} className="input" type="text" />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default TextInput;
