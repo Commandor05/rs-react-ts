@@ -20,13 +20,7 @@ const DateInput = <TFormValues extends Record<string, unknown>>({
         <label className="input-label" htmlFor={name}>
           {label}
         </label>
-        <input
-          {...register(name, validation)}
-          id={name}
-          className="input"
-          type="date"
-          name={name}
-        />
+        <input {...register(name, validation)} id={name} className="input" type="date" />
       </div>
     </div>
   );

@@ -74,10 +74,11 @@ const UserForm: React.FC<UserFormProps> = ({ onFormSubmit }) => {
         />
         <p className="text-red-500">{errors?.userBirthday?.message}</p>
 
-        <SelectBox
-          {...register('userCountry', validationUserRules.validations.userCountry)}
+        <SelectBox<Partial<UserFormValues>>
           name="userCountry"
           label="Country:"
+          register={register}
+          validation={validationUserRules.validations.userCountry}
           options={countries}
         />
         <p className="text-red-500">{errors?.userCountry?.message}</p>
