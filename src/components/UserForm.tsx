@@ -92,7 +92,13 @@ const UserForm: React.FC<UserFormProps> = ({ onFormSubmit }) => {
         />
         <p className="text-red-500">{errors?.userGender?.message}</p>
 
-        <FileUploader name="uploadFile" label="Upload avatar:" register={register} />
+        <FileUploader
+          name="uploadFile"
+          label="Upload avatar:"
+          register={register}
+          validation={validationUserRules.validations.uploadFile}
+        />
+        <p className="text-red-500">{errors?.uploadFile?.message}</p>
 
         <Checkbox<Partial<UserFormValues>>
           name="userTerms"

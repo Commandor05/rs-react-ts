@@ -1,3 +1,5 @@
+import { isImageFileValid } from '../utils/Validations';
+
 export const validationUserRules = {
   validations: {
     userName: {
@@ -29,6 +31,9 @@ export const validationUserRules = {
     },
     userTerms: {
       required: 'Required',
+    },
+    uploadFile: {
+      validate: isImageFileValid,
     },
   },
 };
