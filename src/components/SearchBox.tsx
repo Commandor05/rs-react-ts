@@ -28,6 +28,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ handleSearch }) => {
       localStorage.setData(StorageKey.searchQuery, lastSearch.current.searchQuery);
       localStorage.setData(StorageKey.searchIsApplied, lastSearch.current.searchIsApplied);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSearchClick = () => {
