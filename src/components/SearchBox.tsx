@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import LocalStorage from '../utils/LocalStorage';
 import { Storage, StorageKey } from '../types/Storage';
 
@@ -14,6 +14,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({ handleSearch }) => {
   const storedSearchIsApplied = localStorage.getData(StorageKey.searchIsApplied) as boolean;
   const [searchValue, setSearchValue] = useState<string>(storedSearchValue || '');
   const [searchIsApplied, setSearchIsApplied] = useState<boolean>(storedSearchIsApplied || false);
+  const lastSearch = useRef({
+    searchQuery: storedSearchValue || '',
+    searchIsApplied: storedSearchIsApplied || false,
+  });
 
   useEffect(() => {
     if (searchIsApplied) {
@@ -21,23 +25,30 @@ const SearchBox: React.FC<SearchBoxProps> = ({ handleSearch }) => {
     }
 
     return () => {
-      localStorage.setData(StorageKey.searchQuery, searchValue);
-      localStorage.setData(StorageKey.searchIsApplied, searchIsApplied);
+      localStorage.setData(StorageKey.searchQuery, lastSearch.current.searchQuery);
+      localStorage.setData(StorageKey.searchIsApplied, lastSearch.current.searchIsApplied);
     };
-  });
+  }, []);
 
   const handleSearchClick = () => {
     handleSearch(searchValue);
     setSearchIsApplied(true);
+    lastSearch.current = { ...lastSearch.current, searchIsApplied: true };
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
-    setSearchIsApplied(false);
+    let searchIsApplied = false;
+
     if (!event.target.value) {
       handleSearch(event.target.value);
-      setSearchIsApplied(true);
+      searchIsApplied = true;
     }
+    setSearchIsApplied(searchIsApplied);
+    lastSearch.current = {
+      searchQuery: event.target.value as string,
+      searchIsApplied: searchIsApplied,
+    };
   };
 
   return (
