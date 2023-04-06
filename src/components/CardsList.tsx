@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PropsWithChildren } from 'react';
 import Card from './Card';
 import { Product } from '../types/Product';
 import { User } from '../types/User';
@@ -14,25 +14,22 @@ function isProduct(arg: Product | User): arg is Product {
   return 'brand' in arg;
 }
 
-class CardsList<T extends Product | User> extends Component<CardsListProps<T>> {
-  render() {
-    const items = this.props.items;
-    return (
-      <div className="flex flex-wrap gap-10 justify-center pb-5 md:pb-10">
-        {items.length === 0 ? (
-          <h2 className="text-5xl font-bold text-center">{NO_DATA_MESSAGE}</h2>
-        ) : (
-          items.map((item: T, index) =>
-            isProduct(item) ? (
-              <Card key={item.id} item={item} />
-            ) : (
-              <UserCard key={index} item={item} />
-            )
+const CardsList = <T extends Product | User>({ items }: PropsWithChildren<CardsListProps<T>>) => {
+  return (
+    <div className="flex flex-wrap gap-10 justify-center pb-5 md:pb-10">
+      {items.length === 0 ? (
+        <h2 className="text-5xl font-bold text-center">{NO_DATA_MESSAGE}</h2>
+      ) : (
+        items.map((item: T, index) =>
+          isProduct(item) ? (
+            <Card key={item.id} item={item} />
+          ) : (
+            <UserCard key={index} item={item} />
           )
-        )}
-      </div>
-    );
-  }
-}
+        )
+      )}
+    </div>
+  );
+};
 
 export default CardsList;

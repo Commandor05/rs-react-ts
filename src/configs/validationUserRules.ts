@@ -1,52 +1,39 @@
+import { isImageFileValid } from '../utils/Validations';
+
 export const validationUserRules = {
   validations: {
     userName: {
-      required: {
-        value: true,
-        message: 'Required',
-      },
+      required: 'Required',
       pattern: {
-        value: '^[A-Z]+[a-zA-Z]*$',
-        message: 'First letter must be capital',
+        value: /^[A-Z]+[a-zA-Z]*$/,
+        message: 'Should contain only letters and first letter must be capital',
       },
     },
     userSurname: {
-      required: {
-        value: true,
-        message: 'Required',
-      },
+      required: 'Required',
       pattern: {
-        value: '^[A-Z]+[a-zA-Z]*$',
-        message: 'First letter must be capital',
+        value: /^[A-Z]+[a-zA-Z]*$/,
+        message: 'Should contain only letters and first letter must be capital',
       },
     },
     userBirthday: {
-      required: {
-        value: true,
-        message: 'Required',
-      },
+      required: 'Required',
       pattern: {
-        value: '[0-9]{4}-[0-9]{2}-[0-9]{2}',
+        value: /[0-9]{4}-[0-9]{2}-[0-9]{2}/,
         message: 'Invalid date format',
       },
     },
     userCountry: {
-      required: {
-        value: true,
-        message: 'Required',
-      },
+      required: 'Required',
     },
     userGender: {
-      required: {
-        value: true,
-        message: 'Required',
-      },
+      required: 'Required',
     },
     userTerms: {
-      required: {
-        value: true,
-        message: 'Required',
-      },
+      required: 'Required',
+    },
+    uploadFile: {
+      validate: isImageFileValid,
     },
   },
 };
