@@ -1,8 +1,10 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import Card from './Card';
 import { User } from '../types/User';
 import UserCard from './UserCard';
 import { Photo } from '../types/Photo';
+import Modal from './Modal';
+import DetailsCard from './DetailsCard';
 
 type CardsListProps<T> = {
   items: T[] | [];
@@ -15,16 +17,36 @@ function isPhoto(arg: Photo | User): arg is Photo {
 }
 
 const CardsList = <T extends Photo | User>({ items }: PropsWithChildren<CardsListProps<T>>) => {
+  const [showDetailsModal, setShowDetailsModal] = useState<boolean>(false);
+  const [detailsItem, setDetailsItem] = useState<Photo | null>(null);
+  const handleCardDetails = (photo: Photo) => {
+    setShowDetailsModal(true);
+    setDetailsItem(photo);
+  };
+
+  const hideDetailsModal = () => {
+    setShowDetailsModal(false);
+  };
+
   return (
-    <div className="flex flex-wrap gap-10 justify-center pb-5 md:pb-10">
-      {items.length === 0 ? (
-        <h2 className="text-5xl font-bold text-center">{NO_DATA_MESSAGE}</h2>
-      ) : (
-        items.map((item: T, index) =>
-          isPhoto(item) ? <Card key={item.id} item={item} /> : <UserCard key={index} item={item} />
-        )
-      )}
-    </div>
+    <>
+      <div className="flex flex-wrap gap-10 justify-center pb-5 md:pb-10">
+        {items.length === 0 ? (
+          <h2 className="text-5xl font-bold text-center">{NO_DATA_MESSAGE}</h2>
+        ) : (
+          items.map((item: T, index) =>
+            isPhoto(item) ? (
+              <Card key={item.id} item={item} handleCardDetails={handleCardDetails} />
+            ) : (
+              <UserCard key={index} item={item} />
+            )
+          )
+        )}
+      </div>
+      <Modal onClose={hideDetailsModal} show={showDetailsModal}>
+        <DetailsCard item={detailsItem} handleClose={hideDetailsModal} />
+      </Modal>
+    </>
   );
 };
 

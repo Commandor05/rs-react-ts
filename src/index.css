@@ -21,3 +21,7 @@
 .modal-container {
     @apply w-96;
 }
+
+.accent-border {
+    @apply border-2 rounded border-cyan-700 p-1;
+}
