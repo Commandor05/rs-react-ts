@@ -2,9 +2,9 @@ export type Photo = {
   id: string;
   width: number;
   height: number;
-  alt_description: string;
+  alt_description: string | null;
   links: { self: string; html: string; download: string; download_location: string };
-  urls: { large: string; regular: string; raw: string; small: string; thumb: string };
+  urls: { large?: string; regular: string; raw: string; small: string; thumb: string };
   color: string | null;
   likes: number;
   user: {
@@ -12,6 +12,6 @@ export type Photo = {
     username: string;
     name: string;
     total_photos: number;
-    portfolio_url: string;
+    portfolio_url: string | null;
   };
 };
