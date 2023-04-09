@@ -1,26 +1,33 @@
 import { describe, it } from 'vitest';
-import { render, waitFor } from '@testing-library/react';
+import { act, render, waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import Home from '../pages/Home';
 
 describe('Home', () => {
   it('Fetch and display photo cards', async () => {
-    const { findByText } = render(<Home />);
-    expect(await findByText('a large city with lots of tall buildings')).toBeInTheDocument();
+    await act(async () => {
+      render(<Home />);
+    });
+    expect(await screen.findByText('a large city with lots of tall buildings')).toBeInTheDocument();
   });
 
   it('Fetch and display photo cards using search', async () => {
-    const { findByText, getByRole } = render(<Home />);
-
-    userEvent.type(getByRole('searchbox'), 'test');
-
-    await waitFor(() => {
-      expect(getByRole('searchbox')).toHaveValue('test');
+    await act(async () => {
+      render(<Home />);
     });
-
-    userEvent.click(getByRole('button'));
-
-    expect(await findByText('Ben Mullins')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole('searchbox')).toHaveValue('');
+    });
+    await act(async () => {
+      userEvent.type(screen.getByRole('searchbox'), 'test');
+    });
+    await waitFor(() => {
+      expect(screen.getByRole('searchbox')).toHaveValue('test');
+    });
+    await act(async () => {
+      userEvent.click(screen.getByRole('button'));
+    });
+    expect(await screen.findByText('Ben Mullins')).toBeInTheDocument();
   });
 });
