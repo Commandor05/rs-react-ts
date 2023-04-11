@@ -18,10 +18,10 @@ function isPhoto(arg: Photo | User): arg is Photo {
 
 const CardsList = <T extends Photo | User>({ items }: PropsWithChildren<CardsListProps<T>>) => {
   const [showDetailsModal, setShowDetailsModal] = useState<boolean>(false);
-  const [detailsItem, setDetailsItem] = useState<Photo | null>(null);
+  const [detailsId, setDetailsId] = useState<string | null>(null);
   const handleCardDetails = (photo: Photo) => {
     setShowDetailsModal(true);
-    setDetailsItem(photo);
+    setDetailsId(photo.id);
   };
 
   const hideDetailsModal = () => {
@@ -44,7 +44,7 @@ const CardsList = <T extends Photo | User>({ items }: PropsWithChildren<CardsLis
         )}
       </div>
       <Modal onClose={hideDetailsModal} show={showDetailsModal}>
-        <DetailsCard item={detailsItem} handleClose={hideDetailsModal} />
+        <DetailsCard id={detailsId} handleClose={hideDetailsModal} />
       </Modal>
     </>
   );

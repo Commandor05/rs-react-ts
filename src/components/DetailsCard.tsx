@@ -1,24 +1,33 @@
 import React from 'react';
 import { Photo } from '../types/Photo';
 import { FaRegTimesCircle, FaRegThumbsUp, FaLink, FaFileDownload } from 'react-icons/fa';
+import useFetch from '../hooks/useFetch';
+import Spinner from './Spinner';
 
 type DetailsCardProps = {
-  item: Photo | null;
+  id: string | null;
   handleClose: () => void;
 };
 
-const DetailsCard: React.FC<DetailsCardProps> = ({ item, handleClose }) => {
+const DetailsCard: React.FC<DetailsCardProps> = ({ id, handleClose }) => {
+  const potosEndpoint = id ? `/photos/${id}` : '';
+  const { data, isLoading, error } = useFetch<Photo>(potosEndpoint);
+
   let content = <h2 className="text-2xl">No data to display</h2>;
 
-  if (item) {
-    const { likes, width, height, urls, alt_description, user, links } = item;
+  if (data) {
+    const { likes, width, height, urls, alt_description, user, links } = data;
     const title = alt_description || 'No description';
     content = (
       <>
         <h3 className="justify-self-center self-center text-xl font-bold text-center my-2 capitalize">
           {title}
         </h3>
-        <img className="justify-self-center self-center" src={urls.small} alt={alt_description} />
+        <img
+          className="justify-self-center self-center"
+          src={urls.small}
+          alt={alt_description || 'Full size image'}
+        />
         <div className="flex items-center m-3 gap-1">
           <p className="text-sm accent-border">W: {width}</p>
           <p className="text-sm accent-border">H: {height}</p>
@@ -56,6 +65,8 @@ const DetailsCard: React.FC<DetailsCardProps> = ({ item, handleClose }) => {
         </div>
       </>
     );
+  } else if (error) {
+    content = <h2 className="text-4xl text-center align-middle p-11 text-red-600">{error}</h2>;
   }
 
   return (
@@ -65,7 +76,13 @@ const DetailsCard: React.FC<DetailsCardProps> = ({ item, handleClose }) => {
         className="cursor-pointer drop-shadow h-5 w-5 m-2 float-right hover:scale-110 transition-all"
         onClick={handleClose}
       />
-      <div className="container flex flex-col">{content}</div>
+      {isLoading ? (
+        <div className="m-20">
+          <Spinner />
+        </div>
+      ) : (
+        <div className="container flex flex-col">{content}</div>
+      )}
     </div>
   );
 };
