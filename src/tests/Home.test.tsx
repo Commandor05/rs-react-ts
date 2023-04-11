@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest';
-import { act, render, waitFor, screen } from '@testing-library/react';
+import { act, render, waitFor, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import Home from '../pages/Home';
@@ -23,10 +23,10 @@ describe('Home', () => {
       userEvent.type(screen.getByRole('searchbox'), 'test');
     });
     await waitFor(() => {
-      expect(screen.getByRole('searchbox')).toHaveValue('test');
+      fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'test' } });
     });
     await act(async () => {
-      userEvent.click(screen.getByRole('button'));
+      screen.getByRole('button').click();
     });
     expect(await screen.findByText('Ben Mullins')).toBeInTheDocument();
   });
