@@ -35,6 +35,8 @@ const SearchBox: React.FC<SearchBoxProps> = ({ handleSearch }) => {
     handleSearch(searchValue);
     setSearchIsApplied(true);
     lastSearch.current = { ...lastSearch.current, searchIsApplied: true };
+    localStorage.setData(StorageKey.searchQuery, lastSearch.current.searchQuery);
+    localStorage.setData(StorageKey.searchIsApplied, lastSearch.current.searchIsApplied);
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -44,6 +46,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ handleSearch }) => {
     if (!event.target.value) {
       handleSearch(event.target.value);
       searchIsApplied = true;
+      localStorage.removeAll();
     }
     setSearchIsApplied(searchIsApplied);
     lastSearch.current = {
