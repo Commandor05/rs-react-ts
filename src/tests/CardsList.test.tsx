@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 
 import CardsList, { NO_DATA_MESSAGE } from '../components/CardsList';
 
-import productsData from '../data/products';
+import photosData from '../data/photos';
 
 describe('CardsList', () => {
   it('Render Not found data message for empty items input', () => {
@@ -12,12 +12,14 @@ describe('CardsList', () => {
   });
 
   it('Render Card from list', () => {
-    render(<CardsList items={[productsData[0]]} />);
-    expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent(productsData[0].title);
+    render(<CardsList items={[photosData[0]]} />);
+    expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent(
+      photosData[0].alt_description as string
+    );
   });
 
   it('Render all Cards from list', () => {
-    render(<CardsList items={productsData} />);
-    expect(screen.getAllByRole('heading', { level: 3 }).length).toEqual(productsData.length);
+    render(<CardsList items={photosData} />);
+    expect(screen.getAllByRole('heading', { level: 3 }).length).toEqual(photosData.length);
   });
 });
