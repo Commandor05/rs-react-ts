@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { validationUserRules } from '../configs/validationUserRules';
 import { countries } from '../configs/countries';
 import { User } from '../types/User';
+import { useAppDispatch } from '../redux/hooks';
 import DateInput from './DateInput';
 import FileUploader from './FileUploader';
 import Modal from './Modal';
@@ -10,16 +11,14 @@ import SelectBox from './SelectBox';
 import TextInput from './TextInput';
 import Checkbox from './Checkbox';
 import RadioGroup from './RadioGroup';
-
-type UserFormProps = {
-  onFormSubmit: (userData: User) => void;
-};
+import { addedUser } from '../redux/features/users/usersSlice';
 
 export type UserFormValues = User & {
   uploadFile?: File[];
 };
 
-const UserForm: React.FC<UserFormProps> = ({ onFormSubmit }) => {
+const UserForm: React.FC = () => {
+  const dispatch = useAppDispatch();
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const {
     register,
@@ -43,7 +42,7 @@ const UserForm: React.FC<UserFormProps> = ({ onFormSubmit }) => {
       data.userAvatar = data.uploadFile[0];
       delete data.uploadFile;
     }
-    onFormSubmit(data as User);
+    dispatch(addedUser(data as User));
     reset();
   };
 

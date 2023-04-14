@@ -1,20 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CardsList from '../components/CardsList';
 import UserForm from '../components/UserForm';
+import { useAppSelector } from '../redux/hooks';
 import { User } from '../types/User';
 
-type UsersState = User[] | [];
-
 const Forms: React.FC = () => {
-  const [users, setUsers] = useState<UsersState>([]);
-
-  const handleFormSubmit = (userData: User) => {
-    setUsers((prevState) => [...prevState, userData]);
-  };
+  const users = useAppSelector((state) => state.users.data);
 
   return (
     <>
-      <UserForm onFormSubmit={handleFormSubmit} />
+      <UserForm />
       <hr className="m-10" />
       <CardsList<User> items={users} />
     </>
