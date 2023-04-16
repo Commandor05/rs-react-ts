@@ -1,58 +1,32 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import LocalStorage from '../utils/LocalStorage';
-import { Storage, StorageKey } from '../types/Storage';
+import React, { ChangeEvent } from 'react';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { updatedSearchQuery } from '../redux/features/search/searchSlice';
+import { fetchPhotos } from '../redux/features/photos/photosSlice';
+import { potosEndpoint } from '../main';
 
 const SEARCH_BUTTON_TITLE = 'Search';
 
-type SearchBoxProps = {
-  handleSearch: (searchValue: string) => void;
-};
+const searchPotosEndpoint = '/search/photos?query=';
 
-const SearchBox: React.FC<SearchBoxProps> = ({ handleSearch }) => {
-  const localStorage: Storage = LocalStorage.getInstance();
-  const storedSearchValue = localStorage.getData(StorageKey.searchQuery) as string;
-  const storedSearchIsApplied = localStorage.getData(StorageKey.searchIsApplied) as boolean;
-  const [searchValue, setSearchValue] = useState<string>(storedSearchValue || '');
-  const [searchIsApplied, setSearchIsApplied] = useState<boolean>(storedSearchIsApplied || false);
-  const lastSearch = useRef({
-    searchQuery: storedSearchValue || '',
-    searchIsApplied: storedSearchIsApplied || false,
-  });
+const SearchBox: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { searchQuery } = useAppSelector((state) => state.search);
 
-  useEffect(() => {
-    if (searchIsApplied) {
-      handleSearch(searchValue);
-    }
-
-    return () => {
-      localStorage.setData(StorageKey.searchQuery, lastSearch.current.searchQuery);
-      localStorage.setData(StorageKey.searchIsApplied, lastSearch.current.searchIsApplied);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleSearch = (searchQuery: string | null) => {
+    const endpoint = searchQuery ? `${searchPotosEndpoint}${searchQuery}` : potosEndpoint;
+    const dataField = searchQuery ? 'results' : undefined;
+    dispatch(fetchPhotos({ endpoint, dataField }));
+  };
 
   const handleSearchClick = () => {
-    handleSearch(searchValue);
-    setSearchIsApplied(true);
-    lastSearch.current = { ...lastSearch.current, searchIsApplied: true };
-    localStorage.setData(StorageKey.searchQuery, lastSearch.current.searchQuery);
-    localStorage.setData(StorageKey.searchIsApplied, lastSearch.current.searchIsApplied);
+    handleSearch(searchQuery);
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
-    let searchIsApplied = false;
-
+    dispatch(updatedSearchQuery(event.target.value));
     if (!event.target.value) {
-      handleSearch(event.target.value);
-      searchIsApplied = true;
-      localStorage.removeAll();
+      handleSearch(null);
     }
-    setSearchIsApplied(searchIsApplied);
-    lastSearch.current = {
-      searchQuery: event.target.value as string,
-      searchIsApplied: searchIsApplied,
-    };
   };
 
   return (
@@ -62,7 +36,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ handleSearch }) => {
           className="grow py-3 px-6 rounded-l-md border-2 border-indigo-300"
           type="search"
           id="search"
-          value={searchValue}
+          value={searchQuery}
           onChange={handleChange}
         />
         <button

@@ -1,22 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import CardsList from '../components/CardsList';
 import SearchBox from '../components/SearchBox';
-import useFetch from '../hooks/useFetch';
+import { useAppSelector } from '../redux/hooks';
 import { Photo } from '../types/Photo';
 import Spinner from '../components/Spinner';
 import Modal from '../components/Modal';
 
-const potosEndpoint = '/photos';
-const searchPotosEndpoint = '/search/photos?query=';
-
 const Home: React.FC = () => {
-  const { data, isLoading, error, request } = useFetch<Photo[]>(potosEndpoint);
+  const { isLoading, data, error } = useAppSelector((state) => state.photos);
   const [showErrorModal, setShowErrorModal] = useState<boolean>(Boolean(error));
-
-  const handleSearch = (queryString: string) => {
-    const endpoint = queryString ? `${searchPotosEndpoint}${queryString}` : potosEndpoint;
-    request(endpoint);
-  };
 
   const hideErrorModal = () => {
     setShowErrorModal(false);
@@ -28,7 +20,7 @@ const Home: React.FC = () => {
 
   return (
     <section className="flex flex-col" data-testid="home-page-content">
-      <SearchBox handleSearch={handleSearch} />
+      <SearchBox />
       {data && !isLoading && !error && <CardsList<Photo> items={data} />}
       {isLoading && (
         <div className="mt-20">

@@ -5,13 +5,18 @@ import { Provider } from 'react-redux';
 import App from './App';
 import store from './redux/store';
 import './index.css';
+import { fetchPhotos } from './redux/features/photos/photosSlice';
+
+export const potosEndpoint = '/photos';
+
+store.dispatch(fetchPhotos({ endpoint: potosEndpoint }));
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
+    <Provider store={store}>
+      <BrowserRouter>
         <App />
-      </Provider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
