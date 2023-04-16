@@ -1,17 +1,16 @@
 import React from 'react';
-import { Photo } from '../types/Photo';
 import { FaRegTimesCircle, FaRegThumbsUp, FaLink, FaFileDownload } from 'react-icons/fa';
-import useFetch from '../hooks/useFetch';
 import Spinner from './Spinner';
+import { useFetchPhotoQuery } from '../redux/features/photo/photoSlice';
 
 type DetailsCardProps = {
-  id: string | null;
+  id: string;
   handleClose: () => void;
 };
 
 const DetailsCard: React.FC<DetailsCardProps> = ({ id, handleClose }) => {
-  const potosEndpoint = id ? `/photos/${id}` : '';
-  const { data, isLoading, error } = useFetch<Photo>(potosEndpoint);
+  const { data, isFetching: isLoading, isError } = useFetchPhotoQuery(id);
+  const errorMessage = 'Something went wrong!';
 
   let content = <h2 className="text-2xl">No data to display</h2>;
 
@@ -65,8 +64,10 @@ const DetailsCard: React.FC<DetailsCardProps> = ({ id, handleClose }) => {
         </div>
       </>
     );
-  } else if (error) {
-    content = <h2 className="text-4xl text-center align-middle p-11 text-red-600">{error}</h2>;
+  } else if (isError) {
+    content = (
+      <h2 className="text-4xl text-center align-middle p-11 text-red-600">{errorMessage}</h2>
+    );
   }
 
   return (
