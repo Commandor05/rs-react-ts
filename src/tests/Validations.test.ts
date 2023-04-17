@@ -7,7 +7,7 @@ const getFileList = (file: File) => {
   const fileList: FileList = {
     0: file,
     length: 1,
-    item: (index: number) => file,
+    item: () => file,
     [Symbol.iterator]: function (): IterableIterator<File> {
       throw new Error('Function not implemented.');
     },

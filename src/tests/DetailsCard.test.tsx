@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest';
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import DetailsCard from '../components/DetailsCard';
 import photosData from '../data/photos';
 import { Provider } from 'react-redux';
