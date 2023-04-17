@@ -39,7 +39,7 @@ const UserForm: React.FC = () => {
   const onSubmit: SubmitHandler<Partial<UserFormValues>> = (data) => {
     setShowConfirmModal(true);
     if (data.uploadFile && data.uploadFile?.length > 0) {
-      data.userAvatar = data.uploadFile[0];
+      data.userAvatar = URL.createObjectURL(data.uploadFile[0]);
       delete data.uploadFile;
     }
     dispatch(addedUser(data as User));

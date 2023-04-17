@@ -26,7 +26,7 @@ const UserCard: React.FC<UserCardsProps> = ({ item }) => {
     >
       <img
         className="w-24 h-24 justify-self-center self-center rounded-full"
-        src={userAvatar ? URL.createObjectURL(userAvatar) : avatar}
+        src={userAvatar ? userAvatar : avatar}
         alt="Avatar"
       />
       <div>
