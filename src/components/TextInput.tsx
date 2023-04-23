@@ -20,7 +20,13 @@ const TextInput = <TFormValues extends Record<string, unknown>>({
         <label className="input-label" htmlFor={name}>
           {label}
         </label>
-        <input {...register(name, validation)} className="input" type="text" />
+        <input
+          {...register(name, validation)}
+          id={name}
+          data-testid={name}
+          className="input"
+          type="text"
+        />
       </div>
     </div>
   );

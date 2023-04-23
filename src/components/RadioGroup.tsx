@@ -29,6 +29,7 @@ const RadioGroup = <TFormValues extends Record<string, unknown>>({
                 type="radio"
                 value={title}
                 id={`${name}-${title}`}
+                data-testid={`${name}-${title}`}
                 {...register(name, validation)}
                 className="w-5 h-5 text-indigo-700 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500 dark:focus:ring-indigo-700"
               />

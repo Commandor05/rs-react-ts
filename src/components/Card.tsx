@@ -15,6 +15,7 @@ const Card: React.FC<CardsProps> = ({ item, handleCardDetails }) => {
         rounded-md border-indigo-600 border-2 
         shadow-md hover:shadow-2xl bg-slate-100  w-64 sm:w-80 py-3 text-lg"
       onClick={() => handleCardDetails(item)}
+      data-testid="get-details"
     >
       <h3 className="justify-self-center self-center text-xl font-bold text-center capitalize">
         {title}

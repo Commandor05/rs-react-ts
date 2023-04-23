@@ -19,6 +19,7 @@ const Checkbox = <TFormValues extends Record<string, unknown>>({
       <input
         type="checkbox"
         id={name}
+        data-testid={name}
         {...register(name, validation)}
         className="w-5 h-5 text-indigo-700 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500 dark:focus:ring-indigo-700"
       />
