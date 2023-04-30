@@ -1,7 +1,8 @@
 import React from 'react';
 import { User } from '../types/User';
+import * as pkg from 'react-icons/fa/index.js';
 import avatar from '../assets/ava.png';
-import { FaCheck, FaEnvelope } from 'react-icons/fa';
+const { FaCheck, FaEnvelope } = pkg;
 
 type UserCardsProps = {
   item: User;
