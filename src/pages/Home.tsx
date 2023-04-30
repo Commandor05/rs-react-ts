@@ -1,4 +1,4 @@
-import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import CardsList from '../components/CardsList';
 import SearchBox from '../components/SearchBox';
 import { useAppSelector } from '../redux/hooks';
