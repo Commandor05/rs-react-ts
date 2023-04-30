@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction } from '@reduxjs/toolkit';
 import { User } from '../../../types/User';
+import { createSliceRaw } from '../../../types/redux';
 
 export type UsersState = {
   data: User[];
@@ -7,7 +8,7 @@ export type UsersState = {
 
 const initialState: UsersState = { data: [] };
 
-const usersSlice = createSlice({
+const usersSlice = createSliceRaw({
   name: 'users',
   initialState,
   reducers: {
