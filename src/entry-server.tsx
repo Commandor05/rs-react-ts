@@ -8,7 +8,6 @@ import { photoSlice } from './redux/features/photo/photoSlice';
 
 const store = setupStore({});
 
-const PRELOADED_STATE = '__PRELOADED_STATE__';
 export default async function render(
   url: string | Partial<Location>,
   opts: RenderToPipeableStreamOptions | undefined

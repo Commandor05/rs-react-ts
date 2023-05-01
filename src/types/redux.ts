@@ -7,3 +7,5 @@ const { createSlice } = ((toolkitRaw as TypeToolkitRaw).default ?? toolkitRaw) a
 export const createSliceRaw = createSlice;
 
 export const HYDRATE = '__REDUX_WRAPPER_HYDRATE__';
+
+export const PRELOADED_STATE = '__PRELOADED_STATE__';
