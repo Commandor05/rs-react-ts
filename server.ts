@@ -1,5 +1,8 @@
 import express from 'express';
 import fs from 'fs';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import ejs from 'ejs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -16,7 +19,7 @@ const html = fs
 
 const parts = html.split('not rendered');
 
-let didError = false;
+const didError = false;
 
 function getStatusCode() {
   if (didError) {
@@ -31,7 +34,7 @@ const app = express();
 app.use('/assets', express.static(path.resolve(__dirname, './dist/client/assets')));
 app.use(async (req, res) => {
   res.write(parts[0]);
-  const stream = await renderApp(req.url, {
+  const [stream, preloadedState] = await renderApp(req.url, {
     //don't work properly for unknown reason
     // bootstrapScripts: ['/src/entry-client.tsx'],
     onShellReady() {
@@ -43,11 +46,15 @@ app.use(async (req, res) => {
       res.send('<h1>Something went wrong</h1>');
     },
     onAllReady() {
-      res.write(parts[1]);
+      const replacedString = parts[1].replace(
+        '<replace />',
+        "<script>window.__PRELOADED_STATE__ = <%- JSON.stringify(preloadedState).replace(/</g,'\\u003c') %></script>"
+      );
+      const rendered = ejs.render(replacedString, { preloadedState });
+      res.write(rendered);
       res.end();
     },
     onError(err: { message: unknown }) {
-      didError = true;
       console.error(err.message);
     },
   });
