@@ -14,5 +14,6 @@ export default defineConfig({
       cyCoverageTask(on, config);
       return config;
     },
+    video: false,
   },
 });
