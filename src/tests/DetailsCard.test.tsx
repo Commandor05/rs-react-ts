@@ -5,7 +5,9 @@ import jest from 'jest-mock';
 import DetailsCard from '../components/DetailsCard';
 import photosData from '../data/photos';
 import { Provider } from 'react-redux';
-import store from '../redux/store';
+import setupStore from '../redux/store';
+
+const store = setupStore({});
 
 describe('Details Card', () => {
   it('Render Details Card from title', async () => {

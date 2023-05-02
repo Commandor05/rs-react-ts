@@ -44,7 +44,11 @@ const CardsList = <T extends Photo | User>({ items }: PropsWithChildren<CardsLis
         )}
       </div>
       <Modal onClose={hideDetailsModal} show={showDetailsModal}>
-        <DetailsCard id={detailsId} handleClose={hideDetailsModal} />
+        {detailsId ? (
+          <DetailsCard id={detailsId} handleClose={hideDetailsModal} />
+        ) : (
+          <h3>Error: can not get data without id</h3>
+        )}
       </Modal>
     </>
   );

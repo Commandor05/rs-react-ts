@@ -1,21 +1,15 @@
 import React, { ChangeEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { updatedSearchQuery } from '../redux/features/search/searchSlice';
-import { fetchPhotos } from '../redux/features/photos/photosSlice';
-import { potosEndpoint } from '../main';
+import { updatedSearchQuery, updatedSearchQueryApply } from '../redux/features/search/searchSlice';
 
 const SEARCH_BUTTON_TITLE = 'Search';
-
-const searchPotosEndpoint = '/search/photos?query=';
 
 const SearchBox: React.FC = () => {
   const dispatch = useAppDispatch();
   const { searchQuery } = useAppSelector((state) => state.search);
 
-  const handleSearch = (searchQuery: string | null) => {
-    const endpoint = searchQuery ? `${searchPotosEndpoint}${searchQuery}` : potosEndpoint;
-    const dataField = searchQuery ? 'results' : undefined;
-    dispatch(fetchPhotos({ endpoint, dataField }));
+  const handleSearch = (searchQuery: string) => {
+    dispatch(updatedSearchQueryApply(searchQuery));
   };
 
   const handleSearchClick = () => {
@@ -25,7 +19,7 @@ const SearchBox: React.FC = () => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch(updatedSearchQuery(event.target.value));
     if (!event.target.value) {
-      handleSearch(null);
+      handleSearch('');
     }
   };
 

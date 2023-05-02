@@ -23,7 +23,7 @@ const Card: React.FC<CardsProps> = ({ item, handleCardDetails }) => {
       <img
         className="h-52 justify-self-center self-center"
         src={urls.thumb}
-        alt={alt_description}
+        alt={alt_description || 'Card image'}
       />
       <div className="mx-3 self-end text-rose-900">
         <span>User: </span>

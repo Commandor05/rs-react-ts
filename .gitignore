@@ -25,3 +25,10 @@ dist-ssr
 *.njsprojc
 *.sln
 *.sw?
+
+# Local Netlify folder
+.netlify
+
+.nyc_output
+
+instrumented

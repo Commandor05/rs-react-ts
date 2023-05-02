@@ -1,5 +1,5 @@
-import React from 'react';
-import { FaRegTimesCircle, FaRegThumbsUp, FaLink, FaFileDownload } from 'react-icons/fa';
+import React, { Suspense } from 'react';
+import * as pkg from 'react-icons/fa/index.js';
 import Spinner from './Spinner';
 import { useFetchPhotoQuery } from '../redux/features/photo/photoSlice';
 
@@ -8,6 +8,7 @@ type DetailsCardProps = {
   handleClose: () => void;
 };
 
+const { FaRegThumbsUp, FaFileDownload, FaLink, FaRegTimesCircle } = pkg;
 const DetailsCard: React.FC<DetailsCardProps> = ({ id, handleClose }) => {
   const { data, isFetching: isLoading, isError } = useFetchPhotoQuery(id);
   const errorMessage = 'Something went wrong!';
@@ -77,13 +78,21 @@ const DetailsCard: React.FC<DetailsCardProps> = ({ id, handleClose }) => {
         className="cursor-pointer drop-shadow h-5 w-5 m-2 float-right hover:scale-110 transition-all"
         onClick={handleClose}
       />
-      {isLoading ? (
-        <div className="m-20">
-          <Spinner />
-        </div>
-      ) : (
-        <div className="container flex flex-col">{content}</div>
-      )}
+      <Suspense
+        fallback={
+          <div className="m-20">
+            <Spinner />
+          </div>
+        }
+      >
+        {isLoading ? (
+          <div className="m-20">
+            <Spinner />
+          </div>
+        ) : (
+          <div className="container flex flex-col">{content}</div>
+        )}
+      </Suspense>
     </div>
   );
 };

@@ -1,23 +1,35 @@
-import { configureStore } from '@reduxjs/toolkit';
+import * as toolkitRaw from '@reduxjs/toolkit';
+import { PreloadedState } from '@reduxjs/toolkit';
 import usersReducer from './features/users/usersSlice';
-import photosReducer from './features/photos/photosSlice';
 import searchReducer from './features/search/searchSlice';
 import { photoSlice } from './features/photo/photoSlice';
 
-const store = configureStore({
-  reducer: {
-    users: usersReducer,
-    photos: photosReducer,
-    search: searchReducer,
-    [photoSlice.reducerPath]: photoSlice.reducer,
-  },
-  middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware().concat(photoSlice.middleware);
-  },
+const { configureStore, combineReducers } = ((toolkitRaw as TypeToolkitRaw).default ??
+  toolkitRaw) as typeof toolkitRaw;
+type TypeToolkitRaw = typeof toolkitRaw & { default?: unknown };
+
+const rootReducer = combineReducers({
+  users: usersReducer,
+  search: searchReducer,
+  [photoSlice.reducerPath]: photoSlice.reducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+const setupStore = (preloadedState?: PreloadedState<RootState>) => {
+  return configureStore({
+    reducer: {
+      users: usersReducer,
+      search: searchReducer,
+      [photoSlice.reducerPath]: photoSlice.reducer,
+    },
+    middleware: (getDefaultMiddleware) => {
+      return getDefaultMiddleware().concat(photoSlice.middleware);
+    },
+    preloadedState,
+  });
+};
 
-export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof rootReducer>;
+export type AppStore = ReturnType<typeof setupStore>;
+export type AppDispatch = AppStore['dispatch'];
 
-export default store;
+export default setupStore;

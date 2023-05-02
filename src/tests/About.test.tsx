@@ -2,8 +2,10 @@ import { describe, it } from 'vitest';
 import { act, render, screen } from '@testing-library/react';
 
 import About from '../pages/About';
-import store from '../redux/store';
+import setupStore from '../redux/store';
 import { Provider } from 'react-redux';
+
+const store = setupStore({});
 
 describe('About', () => {
   it('Display About page', async () => {
