@@ -2,8 +2,10 @@ import { describe, it } from 'vitest';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserForm from '../components/UserForm';
-import store from '../redux/store';
+import setupStore from '../redux/store';
 import { Provider } from 'react-redux';
+
+const store = setupStore({});
 
 describe('UserForm', () => {
   it('Render UserForm and submitt without data', async () => {

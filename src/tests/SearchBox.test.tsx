@@ -3,7 +3,9 @@ import { render, screen } from '@testing-library/react';
 
 import SearchBox from '../components/SearchBox';
 import { Provider } from 'react-redux';
-import store from '../redux/store';
+import setupStore from '../redux/store';
+
+const store = setupStore({});
 
 describe('SearchBox', () => {
   it('Renders SearchBox button', () => {
